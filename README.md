@@ -8,7 +8,3 @@ It is a simple task and project management API built with Node.js and Express.
 - Create, view, and delete tasks
 - Create and view projects
 - Assign tasks to projects
-
-## Getting Started
-
-1. Clone the repository:
