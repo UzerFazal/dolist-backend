@@ -1,9 +1,15 @@
 let tasks = [];
 
 exports.createTask = (req, res) => {
-  const { title, description = "", status = "Not Started", dueDate = "", projectId = null } = req.body;
+  const {
+    title,
+    description = "",
+    status = "Not Started",
+    dueDate = "",
+    projectId = null,
+  } = req.body;
 
-  if (!title) {
+  if (!title || typeof title !== "string") {
     return res.status(400).json({ error: "Title is required" });
   }
 
@@ -26,6 +32,24 @@ exports.getAllTasks = (req, res) => {
 
 exports.deleteTask = (req, res) => {
   const { id } = req.params;
-  tasks = tasks.filter(task => task.id !== id);
+  tasks = tasks.filter((task) => task.id !== id);
   res.json({ message: "Task deleted successfully!" });
+};
+
+exports.updateTask = (req, res) => {
+  const { id } = req.params;
+  const { title, description, dueDate, status, projectId } = req.body;
+
+  const task = tasks.find((t) => t.id === id);
+  if (!task) {
+    return res.status(404).json({ error: "Task not found" });
+  }
+
+  if (title !== undefined) task.title = title;
+  if (description !== undefined) task.description = description;
+  if (dueDate !== undefined) task.dueDate = dueDate;
+  if (status !== undefined) task.status = status;
+  if (projectId !== undefined) task.projectId = projectId;
+
+  res.json({ message: "Task updated", task });
 };

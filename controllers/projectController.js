@@ -22,3 +22,32 @@ exports.createProject = (req, res) => {
 exports.getAllProjects = (req, res) => {
   res.json(projects);
 };
+
+exports.deleteProject = (req, res) => {
+  const { id } = req.params;
+  const index = projects.findIndex(p => p.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Project not found' });
+  }
+
+  projects.splice(index, 1);
+  res.json({ message: 'Project deleted successfully' });
+};
+
+exports.updateProject = (req, res) => {
+  const { id } = req.params;
+  const { name, description, status, dueDate } = req.body;
+
+  const project = projects.find(p => p.id === id);
+  if (!project) {
+    return res.status(404).json({ error: "Project not found" });
+  }
+
+  if (name !== undefined) project.name = name;
+  if (description !== undefined) project.description = description;
+  if (status !== undefined) project.status = status;
+  if (dueDate !== undefined) project.dueDate = dueDate;
+
+  res.json({ message: "Project updated", project });
+};
